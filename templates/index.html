@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>زجل - موسى زغيب وخليل روكز</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&family=Lateef&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Sidebar Toggle Button (Mobile) -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Sliding Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h1>زجل</h1>
+        </div>
+
+        <div class="sidebar-tabs">
+            <button class="tab-btn active" data-tab="search">
+                <i class="bi bi-search-heart"></i> بحث
+            </button>
+            <button class="tab-btn" data-tab="chat">
+                <i class="bi bi-robot"></i> ذكاء اصطناعي
+            </button>
+            <button class="tab-btn" data-tab="timeline">
+                <i class="bi bi-clock-history"></i> خط زمني
+            </button>
+        </div>
+
+        <div class="sidebar-content">
+            <!-- Search Tab -->
+            <div id="search-tab" class="tab-content active">
+                <div class="form-group">
+                    <label><i class="bi bi-music-note"></i> القافية (اختياري)</label>
+                    <input type="text" id="rhymePattern" class="form-control"
+                           placeholder="مثال: هوى، ي، تون، ار">
+                </div>
+
+                <div class="form-group">
+                    <label><i class="bi bi-mic"></i> المغني</label>
+                    <select id="singerFilter" class="form-control">
+                        <option value="">الكل</option>
+                        <option>موسى زغيب</option>
+                        <option>خليل روكز</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="bi bi-tag"></i> الموضوع</label>
+                    <select id="themeFilter" class="form-control">
+                        <option value="">الكل</option>
+                        <option>حب</option>
+                        <option>وطن</option>
+                        <option>حنين</option>
+                        <option>غربة</option>
+                        <option>طبيعة</option>
+                        <option>صمود</option>
+                        <option>طفولة</option>
+                        <option>فرح</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="bi bi-geo-alt"></i> المنطقة</label>
+                    <select id="regionFilter" class="form-control">
+                        <option value="">الكل</option>
+                        <option>لبنان</option>
+                        <option>فلسطين</option>
+                        <option>سوريا</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <i class="bi bi-calendar"></i> سنة التأليف
+                        <span id="yearValue" style="float:left; font-weight:700; color:var(--gold);">الكل</span>
+                    </label>
+                    <input type="range" id="yearFilter" class="form-control"
+                           min="1943" max="2011" value="1943" step="1"
+                           oninput="document.getElementById('yearValue').textContent = this.value <= 1943 ? 'الكل' : 'من ' + this.value"
+                           style="width:100%; height:8px; accent-color:var(--gold); margin-top:8px;">
+                </div>
+
+                <button id="searchBtn" class="btn-primary">
+                    <i class="bi bi-search"></i> ابحث في التراث
+                </button>
+
+
+            </div>
+
+            <!-- ✅ IMPROVED: Chat sidebar tab now has useful content instead of dead-end message -->
+            <div id="chat-tab" class="tab-content">
+                <div class="chat-sidebar-content">
+                    <div class="chat-sidebar-icon">💬</div>
+                    <h3>أسئلة مقترحة</h3>
+                    <p>اضغط على أي سؤال لبدء المحادثة:</p>
+
+                    <div class="suggested-questions">
+                        <button class="suggestion-preset" onclick="askPreset(this)">
+                            ما رمزية الأم في شعر موسى زغيب؟
+                        </button>
+                        <button class="suggestion-preset" onclick="askPreset(this)">
+                            كيف صوّر خليل روكز ظلم الفقراء في زجله؟
+                        </button>
+                        <button class="suggestion-preset" onclick="askPreset(this)">
+                            ما تأثير الحرب الأهلية اللبنانية على شعر موسى زغيب؟
+                        </button>
+                        <button class="suggestion-preset" onclick="askPreset(this)">
+                            ما العلاقة الشعرية بين خليل روكز وموسى زغيب؟
+                        </button>
+                        <button class="suggestion-preset" onclick="askPreset(this)">
+                            كيف عبّر الزجل اللبناني عن قضية فلسطين؟
+                        </button>
+                        <button class="suggestion-preset" onclick="askPreset(this)">
+                            ما رمزية الليل في شعر خليل روكز؟
+                        </button>
+                    </div>
+
+                    <div class="chat-sidebar-quote">
+                        <i class="bi bi-quote"></i> "الزجل صوت الشعب وذاكرة الجبل"
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Tab -->
+            <div id="timeline-tab" class="tab-content">
+                <div class="timeline-sidebar">
+                    <div class="tl-poet-filter" id="tlPoetFilter">
+                        <button class="tl-poet-btn active" data-poet="all">الكل</button>
+                        <button class="tl-poet-btn" data-poet="zgheib">زغيب</button>
+                        <button class="tl-poet-btn" data-poet="rokz">روكز</button>
+                    </div>
+                    <div class="tl-legend" id="tlLegend"></div>
+                    <p class="tl-hint"><i class="bi bi-hand-index"></i> انقر على أي نقطة لعرض القصيدة</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Search Results View (Default) -->
+        <div id="searchResultsView" class="view active">
+            <h2 class="results-header">
+                <i class="bi bi-music-note-beamed"></i> نتائج البحث في تراث الزجل
+            </h2>
+            <div id="loading" class="loading" style="display:none;">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">نبحث في أرشيف التراث الزجلي...</div>
+            </div>
+            <div id="resultsContainer"></div>
+
+            <footer class="footer">
+                <div style="font-size:2.2rem;font-weight:800;background:linear-gradient(to right,var(--olive-dark),var(--gold),var(--olive-dark));-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-1px;">زجل</div>
+                <div style="margin-top:8px;font-size:1.05rem;color:var(--olive-medium);font-weight:500;">
+                    <i class="bi bi-c-circle"></i> 2026 • موسى زغيب وخليل روكز
+                </div>
+            </footer>
+        </div>
+
+        <!-- Chat View -->
+        <div id="chatView" class="chat-container">
+            <div class="chat-header">
+                <button class="back-btn" id="backToSearch">
+                    <i class="bi bi-arrow-right"></i> العودة للبحث
+                </button>
+                <h2>
+                    <i class="bi bi-robot"></i> خبير الزجل
+                </h2>
+                <div class="stream-badge" style="display:none;">
+                    <i class="bi bi-broadcast"></i> بث مباشر
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message ai-message">
+                    <strong>مرحباً يا صديقي!</strong><br>
+                    أنا خبير في تراث موسى زغيب وخليل روكز. اسألني عن:
+                    <ul style="margin-top:12px; padding-right:25px; line-height:1.8;">
+                        <li>رموز الشعر (الأم، الجبل، الليل، الوطن)</li>
+                        <li>القوافي والأشكال الشعرية (شروقي، عتابا)</li>
+                        <li>السياق التاريخي (الحرب الأهلية، النكبة، الهجرة)</li>
+                        <li>العلاقة بين روكز وزغيب — الأستاذ والتلميذ</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" class="form-control"
+                       placeholder="اسألني عن رمزية الزيتون في الزجل الفلسطيني...">
+                <button id="micBtn" class="mic-btn">
+                    <i class="bi bi-mic-fill"></i>
+                </button>
+                <button id="sendChatBtn" class="send-btn">
+                    <i class="bi bi-send-fill"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Timeline View -->
+        <div id="timelineView" class="view">
+            <div class="tl-main">
+                <div class="tl-header-bar">
+                    <h2><i class="bi bi-clock-history"></i> الخط الزمني لتراث الزجل</h2>
+                </div>
+                <div class="tl-canvas" id="tlCanvas">
+                    <div class="tl-axis-line"></div>
+                    <div class="tl-dots-layer" id="tlDots"></div>
+                    <div class="tl-ticks-layer" id="tlTicks"></div>
+                </div>
+                <div class="tl-detail" id="tlDetail"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        // Preset question handler — switches to chat view then sends
+        function askPreset(btn) {
+            const question = btn.textContent.trim();
+            showChatView();
+            setTimeout(() => {
+                document.getElementById('chatInput').value = question;
+                sendMessage();
+            }, 350);
+        }
+    </script>
+</body>
+</html>
