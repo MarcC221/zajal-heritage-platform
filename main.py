@@ -70,10 +70,10 @@ def load_songs_data():
                 song_titles[song_id] = song['metadata']['arabic_title']
                 song_years[song_id] = song['metadata'].get('year_composed', 1950)
 
-        logger.info(f'✅ Loaded {len(songs_dict)} songs from {len(collections)} collection(s)')
+        logger.info(f' Loaded {len(songs_dict)} songs from {len(collections)} collection(s)')
         return songs_dict, song_titles, song_years, all_collections_metadata
     except Exception as e:
-        logger.error(f'❌ Error loading song data: {e}')
+        logger.error(f' Error loading song data: {e}')
         sys.exit(1)
 
 
@@ -87,7 +87,7 @@ class ZajalRAG:
         self.ef = embedding_functions.SentenceTransformerEmbeddingFunction(
             model_name=EMBED_MODEL
         )
-        logger.info('✅ Using multilingual embeddings (paraphrase-multilingual-MiniLM-L12-v2)')
+        logger.info(' Using multilingual embeddings (paraphrase-multilingual-MiniLM-L12-v2)')
 
         self.collection = self.client.get_or_create_collection(
             name=CHROMA_COLLECTION,
@@ -101,10 +101,10 @@ class ZajalRAG:
             existing = self.collection.get(include=['metadatas'])
             for meta in existing['metadatas']:
                 self.rhyme_index[meta['rhyme_ending']].append(meta['chunk_id'])
-            logger.info(f'✅ Loaded {self.collection.count()} lines from ChromaDB')
+            logger.info(f' Loaded {self.collection.count()} lines from ChromaDB')
 
     def _ingest(self):
-        logger.info('🔄 Ingesting Zajal content into ChromaDB...')
+        logger.info(' Ingesting Zajal content into ChromaDB...')
         docs, metas, ids = [], [], []
         chunk_id = 0
 
@@ -253,9 +253,9 @@ class ZajalRAG:
                     metadatas=metas[i:i+batch_size],
                     ids=ids[i:i+batch_size]
                 )
-            logger.info(f'✅ Ingested {len(docs)} chunks from {len(self.songs_dict)} songs')
+            logger.info(f' Ingested {len(docs)} chunks from {len(self.songs_dict)} songs')
         else:
-            logger.error('❌ No valid content to ingest!')
+            logger.error(' No valid content to ingest!')
 
     def _format_symbols(self, symbols):
         if not symbols: return "لا يوجد رموز مسجلة"
@@ -377,7 +377,7 @@ class ZajalRAG:
                 structural_chunk_types = ['biography', 'historical_context', 'thematic', 'search_metadata']
                 structured = self._fetch_structured_chunks(query, structural_chunk_types)
                 add_results(structured[:2])  # at most 2 structured chunks upfront
-                logger.info(f"✅ Structured retrieval: {len(structured)} chunks")
+                logger.info(f" Structured retrieval: {len(structured)} chunks")
 
                 # ── B. Forced title match: song title in query → fetch its lines ──
                 forced = []
@@ -388,7 +388,7 @@ class ZajalRAG:
                             limit=6
                         )['metadatas']
                         forced.extend(song_chunks)
-                        logger.info(f"✅ Title match: '{title}' ({len(song_chunks)} lines)")
+                        logger.info(f" Title match: '{title}' ({len(song_chunks)} lines)")
                 if forced:
                     enriched_forced = [self._enrich(m) for m in forced]
                     for r in enriched_forced: r['relevance'] = 1.0
@@ -425,7 +425,7 @@ class ZajalRAG:
             return final_results[:top_k]
 
         except Exception as e:
-            logger.error(f'❌ Search error: {e}')
+            logger.error(f' Search error: {e}')
             raise
 
 
@@ -438,7 +438,7 @@ class ZajalRAG:
         query_norm = normalize_arabic(query)
         for song_id, title in self.song_titles.items():
             if normalize_arabic(title) in query_norm:
-                logger.info(f"✅ Song-specific fetch: '{title}'")
+                logger.info(f" Song-specific fetch: '{title}'")
                 return song_id, self.songs_dict[song_id]
         return None, None
 
